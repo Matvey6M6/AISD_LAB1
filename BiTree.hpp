@@ -36,41 +36,17 @@ class BiTree
     {
         if(!tree) return false;
         if(tree->data == value) return true;
-        if(tree->left) find(tree->left, value);
-        if(tree->right) find(tree->right, value);
+        if(value < value) find(tree->left, value);
+        if(value > value) find(tree->right, value);
     }
 
     Node* find_min(Node* tree)
     {
-        if (tree->left != nullptr) {
-            return find_min(tree->left);
+        if (tree!= nullptr) {
+            if(tree->left != nullptr)return find_min(tree->left);
         } 
         else {
             return tree;
-        }
-    }
-
-    void insert_obj(Node* newbie)
-    {
-        Node* tmp = root;
-        while(tmp)
-        {
-            if(newbie->data < tmp->data)
-            {
-                if(tmp->left) tmp = tmp->left;
-                else
-                {
-                    tmp->left = newbie;
-                }
-            }
-            else if(newbie->data > tmp->data)
-            {
-                if(tmp->right) tmp = tmp->right;
-                else
-                {
-                    tmp->right = newbie;
-                }
-            }
         }
     }
 
@@ -87,35 +63,39 @@ public:
     bool erase(int data)
     {
         Node* tmp = root;
+        
         while (tmp)
         {
+            if(data == tmp->data)
+            {
+                Node* pt = find_min(tmp->right);
+                
+                if(tmp->data)tmp->data = pt->data;
+                else { tmp = nullptr; return true;}
+
+                delete pt;
+                pt = nullptr;
+
+                return true;
+            }
            if(data < tmp->data)
             {
                 if(tmp->left) tmp = tmp->left;
-                else
-                {
-                    Node buffer = *tmp;
-                    delete tmp;
-                    insert_obj(find_mid(tmp->right))
-
-                    return true;
-                }
             }
             else if(data > tmp->data)
             {
                 if(tmp->right) tmp = tmp->right;
-                else
-                {
-                    tmp->right = new Node(data);
-                    return true;
-                }
+            }
         }
-        
+        return false;
     }
 
     bool insert(int data)
     {
+        if(!root) {root = new Node(data); return true;}
+
         Node* tmp = root;
+
         while(tmp)
         {
             if(data < tmp->data)
@@ -163,7 +143,7 @@ public:
     }
 };
 
-class MyIterator
+/*class MyIterator
 {
     Node *Current;
 public:
@@ -193,4 +173,4 @@ public:
         if(Current!=nullptr) Current = Current->right;
         else { std::cout<<"Iterator has reached last value";}
     }
-};
+};*/
