@@ -1,9 +1,11 @@
-#include "BiTree.hpp"
-
+#include "./BiTree/BiTree.hpp"
+#include "./Test/test.hpp"
 #include<string>
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
+#include "SoloTask.hpp"
+//#include <set>
 using namespace std;
 
 char getch(void)
@@ -54,8 +56,16 @@ void add_new_elem(BiTree* MyTreePt)
     cout<<"Value = ";
     int value = 0;
     value = read_value();
-    MyTreePt->insert(value);
-    cout<<"Success! Elem "<<value<<" is inserted!"<<endl;
+    bool res = MyTreePt->insert(value);
+   if(!res)
+   {
+        cout<<"Elem is already in the tree!!!\\Press any key"<<endl;
+        getch();
+   }
+    else
+    {
+        cout<<"Success! Elem "<<value<<" is inserted!"<<endl;
+    }
 }
 
 void check_if_elem_in_tree(BiTree* MyTreePt)
@@ -91,6 +101,7 @@ void menu_2(BiTree* MyTreePt)
         system("clear");
             
         cout<<"MyTree menu"<<endl;
+        MyTreePt->print();
         cout<<"Choose an option:"<<endl;
         cout<<"[1] - add new elem\n[2] - check if elem in the tree\n[3] - erase an elem\n[0] - Exit"<<endl;
 
@@ -100,6 +111,9 @@ void menu_2(BiTree* MyTreePt)
 
         switch (opt)
         {
+            case 48:
+            return;
+            break;
         case 49:
             add_new_elem(MyTreePt);
             break;
@@ -124,34 +138,49 @@ void menu()
 
         cout<<"Welcome to BeTrii menu"<<endl;
         cout<<"Choose an option:"<<endl;
-        cout<<"[1] - Create a binary tree\n[2] - Exit"<<endl;
+        cout<<"[1] - Create a binary tree\n[2] - Start tests\n[3] - Exit"<<endl;
 
         int opt = getch();
 
         //cout<<opt<<endl;
 
-        if(opt == 50) return;
+        if(opt == 51) return;
+        if(opt == 50)
+        {
+            tests();
+        }
         
         BiTree Tree;
         BiTree* pt = &Tree;
 
         while (true)
         {
-            system("clear");
-            cout<<"Input values to be written (0 - stop):"<<endl;
+            int exit_f = 0;
 
-            int value = 1; //value
-
-            while (value != 0)
+            while (exit_f != 27)
             {
+                system("clear");
+                cout<<"Input value to be written: ";
+
+                int value;
                 cout<<"Value = ";
                 value = read_value();
-                Tree.insert(value);
+
+                bool res = Tree.insert(value);
+                if(!res)
+                {
+                    cout<<"Elem is already in the tree!!!\nPress any key"<<endl;
+                }
+                else
+                {
+                    cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
+                    exit_f = getch();
+                }
             }
 
             menu_2(pt);
+            return;
         }
-        
     }
 }
 
