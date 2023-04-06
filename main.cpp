@@ -43,8 +43,58 @@ int read_value()
         catch(exception e)
         {
             cout<<"Input an intenger!!!!!!!!!"<<endl;
+            getch();
         }
     }
+}
+
+void complete_task()
+{
+    system("clear");
+    int exit_f = 0;
+
+    std::vector<int> buffer;
+
+    while(exit_f != 27)
+    {
+        system("clear");
+        cout<<"Complete task menu"<<endl;
+        cout<<"Input value to be written into array: ";
+
+        int value;
+        cout<<"Value = ";
+        value = read_value();
+
+        buffer.push_back(value);
+        cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
+        exit_f = getch();
+    }
+
+    system("clear");
+    cout<<"Complete task menu"<<endl;
+
+    cout<<"Input array: ";
+
+    for(int i: buffer)
+    {
+        cout<< i << " ";
+    }
+
+    cout<<endl;
+
+    vector<int> res = no_repeatings(buffer);
+
+    cout<<"Reslut of filtering: "<<endl;
+
+    for(int i : res)
+    {
+        cout<< i <<" ";
+    }
+    cout<<"\n\n";
+
+    cout<<"Press any key"<<endl;
+    getch();
+
 }
 
 void add_new_elem(BiTree* MyTreePt)
@@ -130,6 +180,41 @@ void menu_2(BiTree* MyTreePt)
     }
 }
 
+void tree_menu()
+{
+    BiTree Tree;
+    BiTree* pt = &Tree;
+
+    while (true)
+    {
+        int exit_f = 0;
+
+        while (exit_f != 27)
+        {
+            system("clear");
+            cout<<"Input value to be written: ";
+
+            int value;
+            cout<<"Value = ";
+            value = read_value();
+
+            bool res = Tree.insert(value);
+            if(!res)
+            {
+                cout<<"Elem is already in the tree!!!\nPress any key"<<endl;
+            }
+            else
+            {
+                cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
+                exit_f = getch();
+            }
+        }
+
+        menu_2(pt);
+        return;
+    }
+}
+
 void menu()
 {
     while(true)
@@ -138,48 +223,27 @@ void menu()
 
         cout<<"Welcome to BeTrii menu"<<endl;
         cout<<"Choose an option:"<<endl;
-        cout<<"[1] - Create a binary tree\n[2] - Start tests\n[3] - Exit"<<endl;
+        cout<<"[1] - Create a binary tree\n[2] - Start tests\n[3] - complete task\n[4] - Exit"<<endl;
 
         int opt = getch();
 
         //cout<<opt<<endl;
-
-        if(opt == 51) return;
-        if(opt == 50)
+        switch (opt)
         {
-            tests();
-        }
-        
-        BiTree Tree;
-        BiTree* pt = &Tree;
-
-        while (true)
-        {
-            int exit_f = 0;
-
-            while (exit_f != 27)
-            {
-                system("clear");
-                cout<<"Input value to be written: ";
-
-                int value;
-                cout<<"Value = ";
-                value = read_value();
-
-                bool res = Tree.insert(value);
-                if(!res)
-                {
-                    cout<<"Elem is already in the tree!!!\nPress any key"<<endl;
-                }
-                else
-                {
-                    cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
-                    exit_f = getch();
-                }
-            }
-
-            menu_2(pt);
+        case 52:
             return;
+            break;
+        case 51:
+            complete_task();
+            break;
+        case 50:
+            tests();
+            break;
+        case 49:
+            tree_menu();
+            break;
+        default:
+            break;
         }
     }
 }

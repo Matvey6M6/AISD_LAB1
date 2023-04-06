@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
 
 struct Node
 {
@@ -15,10 +16,10 @@ struct Node
 
     //Node* Next;
 
-    Node(int data,int depth, Node* parrent , Node* left = nullptr, Node* right = nullptr, Node* Next = nullptr): data(data), depth(depth),parrent(parrent) {}
+    Node(int data,int depth, Node* parrent , Node* left = nullptr, Node* right = nullptr): data(data), depth(depth),parrent(parrent),left(left), right(right) {}
 };
 
-static std::string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
+//static std::string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
 
 
 class BiTree
@@ -37,25 +38,29 @@ class BiTree
         return find_first_right(src);
     }*/
 
-    void copy_nodes(const Node* src_root) 
+    void copy_nodes(const Node* src_root) //перепривязывает к руту другие Node
     {
         if(!src_root) return;
+        this->insert(src_root->data);
         if(src_root->left) copy_nodes(src_root->left);
         if(src_root->right) copy_nodes(src_root->right);
-        this->insert(root->data);
     }
 
-    void clear_tree()
+    void clear_tree(Node*tree) //delete all nodes
     {
-        if(!root) return;
-        if(root->left) copy_nodes(root->left);
-        if(root->right) copy_nodes(root->right);
-        delete root; 
+        if(!tree) return;
+        if(tree->left) clear_tree(tree->left);
+        //if(tree->parrent)tree->parrent->left = nullptr;
+        tree->left = nullptr;
+        if(tree->right) clear_tree(tree->right);
+        //if(tree->parrent)tree->parrent->right = nullptr;
+        tree->right = nullptr;
+        delete tree; 
     }
 
     bool find(Node* tree, int value) 
     {
-        while(tree)
+        while(tree!=nullptr)
         {
             if(value > tree->data) tree = tree->right;
             else if (value < tree-> data) tree = tree->left;
@@ -68,7 +73,7 @@ class BiTree
     Node* find_min(Node* tree)
     {
         if (tree == nullptr) {
-            return nullptr; // no right tree
+            return nullptr; // exit or no right tree
         } 
         
         Node* pt = tree; // pointer at field with pointer
@@ -103,7 +108,7 @@ class BiTree
         return start;
     }*/
 
-    Node* search(int data) //returns pointer at exact node
+    Node* find_node(int data) //returns pointer at exact node
     {
         Node* tmp = root;
         while(tmp)
@@ -116,12 +121,27 @@ class BiTree
     }
 public:
 
+    void walk_by(Node*tree, std::vector<int>* dest)
+    {
+        if(!tree) return;
+        dest->push_back(tree->data);
+        if(tree->right)walk_by(tree->right, dest);
+        if(tree->left)walk_by(tree->left, dest);
+    }
+
+    void write_up(std::vector<int>* dest)
+    {
+        walk_by(root, dest);
+    }
+
+    //friend std::vector<int> no_repeatings(std::vector<int> src);
+
     void print_Tree(Node * p,int level)
     {
         if(p)
         {
             print_Tree(p->left,level + 1);
-            for(int i = 0;i< level;i++) std::cout<<"   ";
+            for(int i = 0;i< level;i++) std::cout<<"\t";
             std::cout << p->data << std::endl;
             print_Tree(p->right,level + 1);
         }
@@ -131,7 +151,7 @@ public:
 
     BiTree(const BiTree& other) { copy_nodes(other.root); }
 
-    ~BiTree() { clear_tree(); }
+    ~BiTree() { clear_tree(root); }
 
     bool contains(int value)    {   return find(root, value);   }
 
@@ -143,15 +163,11 @@ public:
             throw std::exception();
         }
 
-        //if(!contains(value)) return false;
-
-        Node* victim = search(value); // elem to change value
-
-        Node* src = nullptr;
+        Node* victim = find_node(value); // elem to change value
 
         if(victim == nullptr) return false;
 
-        src = find_min(victim->right);  // elem to get value from
+        Node* src = find_min(victim->right);; // elem to take value from (if exists) (will be deleted)
 
         if(src == nullptr) //no right root
         {
@@ -192,7 +208,7 @@ public:
     {
         if(contains(data))return false;
 
-        if(!root) {root = new Node(data, depth, nullptr, nullptr); return true;}
+        if(!root) {root = new Node(data, depth, nullptr); return true;}
         if(data == root->data) return false;
 
         Node* tmp = root;
@@ -229,7 +245,7 @@ public:
 
     BiTree operator=(const BiTree* src)
     {
-        this->clear_tree();
+        this->clear_tree(root);
         copy_nodes(src->root);
         return (*this);
     }
