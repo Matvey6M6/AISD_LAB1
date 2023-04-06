@@ -40,6 +40,40 @@ class BiTree
         if(tree->right) find(tree->right, value);
     }
 
+    Node* find_min(Node* tree)
+    {
+        if (tree->left != nullptr) {
+            return find_min(tree->left);
+        } 
+        else {
+            return tree;
+        }
+    }
+
+    void insert_obj(Node* newbie)
+    {
+        Node* tmp = root;
+        while(tmp)
+        {
+            if(newbie->data < tmp->data)
+            {
+                if(tmp->left) tmp = tmp->left;
+                else
+                {
+                    tmp->left = newbie;
+                }
+            }
+            else if(newbie->data > tmp->data)
+            {
+                if(tmp->right) tmp = tmp->right;
+                else
+                {
+                    tmp->right = newbie;
+                }
+            }
+        }
+    }
+
     //find_sutable();
 public:
     BiTree() { root=nullptr; }
@@ -49,6 +83,35 @@ public:
     ~BiTree() { clear_tree(); }
 
     bool contains(int value)    {   return find(root, value);   }
+
+    bool erase(int data)
+    {
+        Node* tmp = root;
+        while (tmp)
+        {
+           if(data < tmp->data)
+            {
+                if(tmp->left) tmp = tmp->left;
+                else
+                {
+                    Node buffer = *tmp;
+                    delete tmp;
+                    insert_obj(find_mid(tmp->right))
+
+                    return true;
+                }
+            }
+            else if(data > tmp->data)
+            {
+                if(tmp->right) tmp = tmp->right;
+                else
+                {
+                    tmp->right = new Node(data);
+                    return true;
+                }
+        }
+        
+    }
 
     bool insert(int data)
     {
@@ -75,6 +138,28 @@ public:
             }
         }
         return false;
+    }
+
+    void print(Node* tree, int level = 0)
+    {
+        if(!tree) tree = root;
+        if(root->right) {
+            print(root->right, level++);
+            for(int i = 0; i < level; i++) std::cout<<" ";
+            std::cout<<root->data<<std::endl;
+        }
+        if(root->left) {
+            print(root->left, level++);
+            for(int i = 0; i < level; i++) std::cout<<" ";
+            std::cout<<root->data<<std::endl;
+        }
+    }
+
+    BiTree operator=(const BiTree* src)
+    {
+        this->clear_tree();
+        copy_nodes(src->root);
+        return (*this);
     }
 };
 
