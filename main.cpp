@@ -1,11 +1,12 @@
 #include "./BiTree/BiTree.hpp"
-#include "./Test/test.hpp"
-#include<string>
+#include "./Test/tests.hpp"
+#include "SoloTask.hpp"
+
+#include <string>
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
-#include "SoloTask.hpp"
-//#include <set>
+// #include <set>
 using namespace std;
 
 char getch(void)
@@ -32,17 +33,17 @@ char getch(void)
 
 int read_value()
 {
-    while(true)
-    {   
+    while (true)
+    {
         string value;
         try
         {
-            cin>>value;
+            cin >> value;
             return stoi(value);
         }
-        catch(exception e)
+        catch (exception e)
         {
-            cout<<"Input an intenger!!!!!!!!!"<<endl;
+            cout << "Input an intenger!!!!!!!!!" << endl;
             getch();
         }
     }
@@ -55,113 +56,123 @@ void complete_task()
 
     std::vector<int> buffer;
 
-    while(exit_f != 27)
+    while (exit_f != 27)
     {
         system("clear");
-        cout<<"Complete task menu"<<endl;
-        cout<<"Input value to be written into array: ";
+        cout << "Complete task menu" << endl;
+        cout << "Input value to be written into array: ";
 
         int value;
-        cout<<"Value = ";
+        cout << "Value = ";
         value = read_value();
 
         buffer.push_back(value);
-        cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
+        cout << "New elem is added!" << endl
+             << "Press ESC to stop" << endl
+             << "Press ENTER to input more" << endl;
         exit_f = getch();
     }
 
     system("clear");
-    cout<<"Complete task menu"<<endl;
+    cout << "Complete task menu" << endl;
 
-    cout<<"Input array: ";
+    cout << "Input array: ";
 
-    for(int i: buffer)
+    for (int i : buffer)
     {
-        cout<< i << " ";
+        cout << i << " ";
     }
 
-    cout<<endl;
+    cout << endl;
 
     vector<int> res = no_repeatings(buffer);
 
-    cout<<"Reslut of filtering: "<<endl;
+    cout << "Reslut of filtering: " << endl;
 
-    for(int i : res)
+    for (int i : res)
     {
-        cout<< i <<" ";
+        cout << i << " ";
     }
-    cout<<"\n\n";
+    cout << "\n\n";
 
-    cout<<"Press any key"<<endl;
+    cout << "Press any key" << endl;
     getch();
-
 }
 
-void add_new_elem(BiTree* MyTreePt)
+void add_new_elem(BiTree *MyTreePt)
 {
     system("clear");
-        
-    cout<<"MyTree add an elem menu"<<endl;
 
-    cout<<"Value = ";
+    cout << "MyTree add an elem menu" << endl;
+
+    cout << "Value = ";
     int value = 0;
     value = read_value();
     bool res = MyTreePt->insert(value);
-   if(!res)
-   {
-        cout<<"Elem is already in the tree!!!\\Press any key"<<endl;
+    if (!res)
+    {
+        cout << "Elem is already in the tree!!!\\Press any key" << endl;
         getch();
-   }
+    }
     else
     {
-        cout<<"Success! Elem "<<value<<" is inserted!"<<endl;
+        cout << "Success! Elem " << value << " is inserted!" << endl;
     }
 }
 
-void check_if_elem_in_tree(BiTree* MyTreePt)
+void check_if_elem_in_tree(BiTree *MyTreePt)
 {
     system("clear");
-        
-    cout<<"MyTree check if elem in tree menu"<<endl;
 
-    cout<<"Value = ";
+    cout << "MyTree check if elem in tree menu" << endl;
+
+    cout << "Value = ";
     int value = 0;
     value = read_value();
-    if(MyTreePt->contains(value)) cout<<value<<" WAS found the tree."<<endl;
-    else {cout<<value<<" WAS NOT found in the tree."<<endl;}
+    if (MyTreePt->contains(value))
+        cout << value << " WAS found the tree." << endl;
+    else
+    {
+        cout << value << " WAS NOT found in the tree." << endl;
+    }
 }
 
-void erase_an_elem(BiTree* MyTreePt)
+void erase_an_elem(BiTree *MyTreePt)
 {
     system("clear");
-        
-    cout<<"MyTree erase an elem menu"<<endl;
 
-    cout<<"Value = ";
+    cout << "MyTree erase an elem menu" << endl;
+
+    cout << "Value = ";
     int value = 0;
     value = read_value();
 
-    if(MyTreePt->erase(value)) cout<<value<<" has been erased."<<endl;
-    else {cout<<value<<" WAS NOT found in the tree => not deleted";}
+    if (MyTreePt->erase(value))
+        cout << value << " has been erased." << endl;
+    else
+    {
+        cout << value << " WAS NOT found in the tree => not deleted";
+    }
 }
 
-void menu_2(BiTree* MyTreePt)
+void menu_2(BiTree *MyTreePt)
 {
-    while(true){
+    while (true)
+    {
         system("clear");
-            
-        cout<<"MyTree menu"<<endl;
+
+        cout << "MyTree menu" << endl;
         MyTreePt->print();
-        cout<<"Choose an option:"<<endl;
-        cout<<"[1] - add new elem\n[2] - check if elem in the tree\n[3] - erase an elem\n[0] - Exit"<<endl;
+        cout << "Choose an option:" << endl;
+        cout << "[1] - add new elem\n[2] - check if elem in the tree\n[3] - erase an elem\n[0] - Exit" << endl;
 
         int opt = getch();
 
-        cout<<opt<<endl;
+        cout << opt << endl;
 
         switch (opt)
         {
-            case 48:
+        case 48:
             return;
             break;
         case 49:
@@ -183,7 +194,7 @@ void menu_2(BiTree* MyTreePt)
 void tree_menu()
 {
     BiTree Tree;
-    BiTree* pt = &Tree;
+    BiTree *pt = &Tree;
 
     while (true)
     {
@@ -192,20 +203,22 @@ void tree_menu()
         while (exit_f != 27)
         {
             system("clear");
-            cout<<"Input value to be written: ";
+            cout << "Input value to be written: ";
 
             int value;
-            cout<<"Value = ";
+            cout << "Value = ";
             value = read_value();
 
             bool res = Tree.insert(value);
-            if(!res)
+            if (!res)
             {
-                cout<<"Elem is already in the tree!!!\nPress any key"<<endl;
+                cout << "Elem is already in the tree!!!\nPress any key" << endl;
             }
             else
             {
-                cout<<"New elem is added!"<<endl<<"Press ESC to stop"<<endl<<"Press ENTER to input more"<<endl;
+                cout << "New elem is added!" << endl
+                     << "Press ESC to stop" << endl
+                     << "Press ENTER to input more" << endl;
                 exit_f = getch();
             }
         }
@@ -217,17 +230,17 @@ void tree_menu()
 
 void menu()
 {
-    while(true)
+    while (true)
     {
         system("clear");
 
-        cout<<"Welcome to BeTrii menu"<<endl;
-        cout<<"Choose an option:"<<endl;
-        cout<<"[1] - Create a binary tree\n[2] - Start tests\n[3] - complete task\n[4] - Exit"<<endl;
+        cout << "Welcome to BeTrii menu" << endl;
+        cout << "Choose an option:" << endl;
+        cout << "[1] - Create a binary tree\n[2] - Start tests\n[3] - complete task\n[4] - Exit" << endl;
 
         int opt = getch();
 
-        //cout<<opt<<endl;
+        // cout<<opt<<endl;
         switch (opt)
         {
         case 52:
@@ -237,7 +250,10 @@ void menu()
             complete_task();
             break;
         case 50:
+            system("clear");
             tests();
+            cout << "Press any button" << endl;
+            getch();
             break;
         case 49:
             tree_menu();

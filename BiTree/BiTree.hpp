@@ -6,25 +6,24 @@
 struct Node
 {
     int data;
-    Node* left;
-    Node* right;
-    //Node* m_shot_through;
+    Node *left;
+    Node *right;
+    // Node* m_shot_through;
 
-    Node* parrent;
+    Node *parrent;
 
     int depth;
 
-    //Node* Next;
+    // Node* Next;
 
-    Node(int data,int depth, Node* parrent , Node* left = nullptr, Node* right = nullptr): data(data), depth(depth),parrent(parrent),left(left), right(right) {}
+    Node(int data, int depth, Node *parrent, Node *left = nullptr, Node *right = nullptr) : data(data), depth(depth), parrent(parrent), left(left), right(right) {}
 };
 
-//static std::string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
-
+// static std::string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
 
 class BiTree
 {
-    Node* root;
+    Node *root;
 
     /*Node* find_first_right(Node* src)
     {
@@ -38,55 +37,64 @@ class BiTree
         return find_first_right(src);
     }*/
 
-    void copy_nodes(const Node* src_root) //перепривязывает к руту другие Node
+    void copy_nodes(const Node *src_root) // перепривязывает к руту другие Node
     {
-        if(!src_root) return;
+        if (!src_root)
+            return;
         this->insert(src_root->data);
-        if(src_root->left) copy_nodes(src_root->left);
-        if(src_root->right) copy_nodes(src_root->right);
+        if (src_root->left)
+            copy_nodes(src_root->left);
+        if (src_root->right)
+            copy_nodes(src_root->right);
     }
 
-    void clear_tree(Node*tree) //delete all nodes
+    void clear_tree(Node *tree) // delete all nodes
     {
-        if(!tree) return;
-        if(tree->left) clear_tree(tree->left);
-        //if(tree->parrent)tree->parrent->left = nullptr;
+        if (!tree)
+            return;
+        if (tree->left)
+            clear_tree(tree->left);
+        // if(tree->parrent)tree->parrent->left = nullptr;
         tree->left = nullptr;
-        if(tree->right) clear_tree(tree->right);
-        //if(tree->parrent)tree->parrent->right = nullptr;
+        if (tree->right)
+            clear_tree(tree->right);
+        // if(tree->parrent)tree->parrent->right = nullptr;
         tree->right = nullptr;
-        delete tree; 
+        delete tree;
     }
 
-    bool find(Node* tree, int value) 
+    bool find(Node *tree, int value)
     {
-        while(tree!=nullptr)
+        while (tree != nullptr)
         {
-            if(value > tree->data) tree = tree->right;
-            else if (value < tree-> data) tree = tree->left;
-            else {return true;}
+            if (value > tree->data)
+                tree = tree->right;
+            else if (value < tree->data)
+                tree = tree->left;
+            else
+            {
+                return true;
+            }
         }
 
         return false;
     }
 
-    Node* find_min(Node* tree)
+    Node *find_min(Node *tree)
     {
-        if (tree == nullptr) {
+        if (tree == nullptr)
+        {
             return nullptr; // exit or no right tree
-        } 
-        
-        Node* pt = tree; // pointer at field with pointer
+        }
 
-        while(pt->left!= nullptr)
+        Node *pt = tree; // pointer at field with pointer
+
+        while (pt->left != nullptr)
         {
             pt = pt->left;
         }
-        if(pt->right) return pt->right;
-        else return pt;
+        return pt;
     }
-
-    
 
     /*void dump0(Node const * node, std::string const & prefix = "", bool root = true, bool last = true) {
     std::cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor)) << (node ? std::to_string(node->data) : "") << std::endl;
@@ -97,137 +105,191 @@ class BiTree
         dump0(v[i], prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
     }*/
 
+    /*Node* findMin(Node* start, Node*&parent)
+      {
+          while (start->left!=NULL)
+          {
+              parent = start;
+              start = start->left;
+          }
+          return start;
+      }*/
 
-  /*Node* findMin(Node* start, Node*&parent)
+    Node *find_node(int data) // returns pointer at exact node
     {
-        while (start->left!=NULL)
+        Node *tmp = root;
+        while (tmp)
         {
-            parent = start;
-            start = start->left;
-        }
-        return start;
-    }*/
-
-    Node* find_node(int data) //returns pointer at exact node
-    {
-        Node* tmp = root;
-        while(tmp)
-        {
-            if(tmp->data == data) return tmp;
-            if(tmp->data > data) tmp = tmp->left;
-            else tmp = tmp->right;
+            if (tmp->data == data)
+                return tmp;
+            if (tmp->data > data)
+                tmp = tmp->left;
+            else
+                tmp = tmp->right;
         }
         return nullptr;
     }
-public:
 
-    void walk_by(Node*tree, std::vector<int>* dest)
+public:
+    void walk_by(Node *tree, std::vector<int> *dest)
     {
-        if(!tree) return;
+        if (!tree)
+            return;
         dest->push_back(tree->data);
-        if(tree->right)walk_by(tree->right, dest);
-        if(tree->left)walk_by(tree->left, dest);
+        if (tree->right)
+            walk_by(tree->right, dest);
+        if (tree->left)
+            walk_by(tree->left, dest);
     }
 
-    void write_up(std::vector<int>* dest)
+    void write_up(std::vector<int> *dest)
     {
         walk_by(root, dest);
     }
 
-    //friend std::vector<int> no_repeatings(std::vector<int> src);
+    // friend std::vector<int> no_repeatings(std::vector<int> src);
 
-    void print_Tree(Node * p,int level)
+    void print_Tree(Node *p, int level)
     {
-        if(p)
+        if (p)
         {
-            print_Tree(p->left,level + 1);
-            for(int i = 0;i< level;i++) std::cout<<"\t";
+            print_Tree(p->left, level + 1);
+            for (int i = 0; i < level; i++)
+                std::cout << "\t";
             std::cout << p->data << std::endl;
-            print_Tree(p->right,level + 1);
+            print_Tree(p->right, level + 1);
         }
     }
 
-    BiTree() { root=nullptr; }
+    BiTree() { root = nullptr; }
 
-    BiTree(const BiTree& other) { copy_nodes(other.root); }
+    BiTree(const BiTree &other) { copy_nodes(other.root); }
 
     ~BiTree() { clear_tree(root); }
 
-    bool contains(int value)    {   return find(root, value);   }
+    bool contains(int value) { return find(root, value); }
 
-    bool erase(int value)
+    bool erase(int data)
     {
-        if(root->data == value) 
+        if (!root)
+            return false;
+        Node *erase_root = find_node(data);
+        if (erase_root == NULL)
+            return false;
+        if (erase_root == root)
         {
-            std::cout<<"You can't erase root!!!\n"<<std::endl;
-            throw std::exception();
+            if (root->left == NULL && root->right == NULL)
+            {
+                root = NULL;
+                return true;
+            }
+            if (erase_root->left != NULL && erase_root->right == NULL) // åñëè åñòü ëåâîå ïîääåðåâî, íî íåò ïðàâîãî
+            {
+                root = root->left;
+                delete erase_root;
+                return true;
+            }
+            if (erase_root->left == NULL && erase_root->right != NULL) // åñëè åñòü ïðàâîå ïîääåðåâî, íî íåò ëåâîãî
+            {
+                root = root->right;
+                delete erase_root;
+                return true;
+            }
         }
 
-        Node* victim = find_node(value); // elem to change value
+        Node *parent_erase = erase_root->parrent;
 
-        if(victim == nullptr) return false;
-
-        Node* src = find_min(victim->right);; // elem to take value from (if exists) (will be deleted)
-
-        if(src == nullptr) //no right root
+        if (erase_root->left == NULL && erase_root->right == NULL) // óäàëåíèå ëèñòà
         {
-            Node* victim_parrent = victim->parrent;
-            if(victim == victim_parrent->right)
-            {
-                delete victim;
-                victim_parrent->right = nullptr;
-            }
+            Node *parent_erase = erase_root->parrent;
+            if (parent_erase->left == erase_root)
+                parent_erase->left = NULL;
             else
+                parent_erase->right = NULL;
+            delete erase_root;
+            return true;
+        }
+        if (erase_root->left != NULL && erase_root->right == NULL) // åñëè åñòü ëåâîå ïîääåðåâî, íî íåò ïðàâîãî
+        {
+            // bin_tree *parent_erase = find_parent(data, root);
+            if (parent_erase->left == erase_root)
+                parent_erase->left = erase_root->left;
+            else
+                parent_erase->right = erase_root->left;
+            delete erase_root;
+            return true;
+        }
+        if (erase_root->left == NULL && erase_root->right != NULL) // åñëè åñòü ïðàâîå ïîääåðåâî, íî íåò ëåâîãî
+        {
+            // bin_tree *parent_erase = find_parent(data, root);
+            if (parent_erase->left == erase_root)
+                parent_erase->left = erase_root->right;
+            else
+                parent_erase->right = erase_root->right;
+            delete erase_root;
+            return true;
+        }
+        if (erase_root->left != NULL && erase_root->right != NULL) // åñòü îáà ïîääåðåâà
+        {
+            Node *min_node = find_min(erase_root->right);
+            Node *parent_min_node = min_node->parrent;
+            if (min_node->right == NULL) // ó ìèíèìàëüíîãî íåò ïîääåðåâüåâ
             {
-                delete victim;
-                victim_parrent->left = nullptr;
+                erase_root->data = min_node->data;
+                if (parent_min_node->right == min_node)
+                    parent_min_node->right = NULL;
+                else
+                    parent_min_node->left = NULL;
+                delete min_node;
+                return true;
+            }
+            else // ó ìèíèìàëüíîãî åñòü ïðàâîå ïîääåðåâî
+            {
+                erase_root->data = min_node->data;
+                if (parent_min_node->right == min_node)
+                    parent_min_node->right = min_node->right;
+                else
+                    parent_min_node->left = min_node->right;
+
+                delete min_node;
+                return true;
             }
         }
-        else
-        {       
-            victim->data = src->data;
-
-            Node* tmp = src->parrent;
-
-            if(tmp->right == src)
-            {
-                delete src;
-                tmp->right = nullptr;
-            }
-            else
-            {
-                delete src;
-                tmp->left = nullptr;
-            }
-        }
-
-        return true;
-    }   
+        return false;
+    }
 
     bool insert(int data, int depth = 0)
     {
-        if(contains(data))return false;
+        if (contains(data))
+            return false;
 
-        if(!root) {root = new Node(data, depth, nullptr); return true;}
-        if(data == root->data) return false;
-
-        Node* tmp = root;
-
-        while(tmp)
+        if (!root)
         {
-            depth ++;
-            if(data < tmp->data)
+            root = new Node(data, depth, nullptr);
+            return true;
+        }
+        if (data == root->data)
+            return false;
+
+        Node *tmp = root;
+
+        while (tmp)
+        {
+            depth++;
+            if (data < tmp->data)
             {
-                if(tmp->left) tmp = tmp->left;
+                if (tmp->left)
+                    tmp = tmp->left;
                 else
                 {
-                    tmp->left = new Node(data,depth, tmp);
+                    tmp->left = new Node(data, depth, tmp);
                     return true;
                 }
             }
-            else if(data > tmp->data)
+            else if (data > tmp->data)
             {
-                if(tmp->right) tmp = tmp->right;
+                if (tmp->right)
+                    tmp = tmp->right;
                 else
                 {
                     tmp->right = new Node(data, depth, tmp);
@@ -243,7 +305,7 @@ public:
         print_Tree(root, 0);
     }
 
-    BiTree operator=(const BiTree* src)
+    BiTree operator=(const BiTree *src)
     {
         this->clear_tree(root);
         copy_nodes(src->root);
@@ -270,12 +332,12 @@ public:
         return false;
     }
 
-    void go_left() 
-    { 
+    void go_left()
+    {
         if(Current!=nullptr) Current = Current->left;
         else { std::cout<<"Iterator has reached last value";}
     }
-    
+
     void go_rigth()
     {
         if(Current!=nullptr) Current = Current->right;
