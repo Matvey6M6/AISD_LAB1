@@ -8,34 +8,14 @@ struct Node
     int data;
     Node *left;
     Node *right;
-    // Node* m_shot_through;
 
     Node *parrent;
 
-    int depth;
-
-    // Node* Next;
-
-    Node(int data, int depth, Node *parrent, Node *left = nullptr, Node *right = nullptr) : data(data), depth(depth), parrent(parrent), left(left), right(right) {}
+    Node(int data, Node *parrent, Node *left = nullptr, Node *right = nullptr) : data(data), parrent(parrent), left(left), right(right) {}
 };
-
-// static std::string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
-
 class BiTree
 {
     Node *root;
-
-    /*Node* find_first_right(Node* src)
-    {
-        Node* pt = src;
-        while(!pt->right) pt = pt->parrent;
-        return pt->right;
-    }*/
-
-    /*Node* shot_through(Node* src) // прошиваемся, парни
-    {
-        return find_first_right(src);
-    }*/
 
     void copy_nodes(const Node *src_root) // перепривязывает к руту другие Node
     {
@@ -96,25 +76,6 @@ class BiTree
         return pt;
     }
 
-    /*void dump0(Node const * node, std::string const & prefix = "", bool root = true, bool last = true) {
-    std::cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor)) << (node ? std::to_string(node->data) : "") << std::endl;
-    if (!node || (!node->left && !node->right))
-        return;
-    std::vector<Node*> v{node->left, node->right};
-    for (size_t i = 0; i < v.size(); ++i)
-        dump0(v[i], prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
-    }*/
-
-    /*Node* findMin(Node* start, Node*&parent)
-      {
-          while (start->left!=NULL)
-          {
-              parent = start;
-              start = start->left;
-          }
-          return start;
-      }*/
-
     Node *find_node(int data) // returns pointer at exact node
     {
         Node *tmp = root;
@@ -146,8 +107,6 @@ public:
     {
         walk_by(root, dest);
     }
-
-    // friend std::vector<int> no_repeatings(std::vector<int> src);
 
     void print_Tree(Node *p, int level)
     {
@@ -258,14 +217,14 @@ public:
         return false;
     }
 
-    bool insert(int data, int depth = 0)
+    bool insert(int data)
     {
         if (contains(data))
             return false;
 
         if (!root)
         {
-            root = new Node(data, depth, nullptr);
+            root = new Node(data, nullptr);
             return true;
         }
         if (data == root->data)
@@ -275,14 +234,13 @@ public:
 
         while (tmp)
         {
-            depth++;
             if (data < tmp->data)
             {
                 if (tmp->left)
                     tmp = tmp->left;
                 else
                 {
-                    tmp->left = new Node(data, depth, tmp);
+                    tmp->left = new Node(data, tmp);
                     return true;
                 }
             }
@@ -292,7 +250,7 @@ public:
                     tmp = tmp->right;
                 else
                 {
-                    tmp->right = new Node(data, depth, tmp);
+                    tmp->right = new Node(data, tmp);
                     return true;
                 }
             }
@@ -312,35 +270,3 @@ public:
         return (*this);
     }
 };
-
-/*class MyIterator
-{
-    Node *Current;
-public:
-
-    MyIterator(Node *obj) : Current(obj)
-    {}
-
-    int operator*()
-    {
-        return Current->data;
-    }
-
-    bool operator!=(const MyIterator& obj)
-    {
-        if(this->Current != obj.Current) return true;
-        return false;
-    }
-
-    void go_left()
-    {
-        if(Current!=nullptr) Current = Current->left;
-        else { std::cout<<"Iterator has reached last value";}
-    }
-
-    void go_rigth()
-    {
-        if(Current!=nullptr) Current = Current->right;
-        else { std::cout<<"Iterator has reached last value";}
-    }
-};*/
